@@ -4,9 +4,16 @@
 namespace poorly
 {
 
+
 class ArgCvMaker
 {
 public:
+	struct ArgCV
+	{
+		size_t c;
+		char** v;
+	};
+
 	ArgCvMaker() = default;
 	ArgCvMaker(size_t newsize);
 	~ArgCvMaker() = default;
@@ -17,8 +24,7 @@ public:
 	void add(const std::string& data);
 	
 	// Any previously made ArgVs are invalidated
-	char** makeArgV();
-	size_t makeArgC() const noexcept;
+	const ArgCV& makeArgCV();
 
 
 private:
@@ -28,6 +34,7 @@ private:
 	std::vector<char>	m_data	= {};
 	std::vector<size_t> m_idxs	= {};
 	std::vector<char*>	m_argv	= {};
+	ArgCV				m_cv	= {};
 };
 
 

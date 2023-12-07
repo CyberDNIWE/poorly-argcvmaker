@@ -48,8 +48,9 @@ int main(int argc, char **argv)
 
 	//Checking case with lots of stuff
 	{
-		char** my_argv = argMaker.makeArgV(); // Yeeee!
-		size_t my_argc = argMaker.makeArgC();
+		const poorly::ArgCvMaker::ArgCV& argcv = argMaker.makeArgCV();
+		size_t my_argc = argcv.c;
+		char** my_argv = argcv.v; // Yeeee!
 		
 		for(size_t i = 0; i < my_argc; ++i) // displays "First" "Second" etc
 		{
@@ -61,8 +62,9 @@ int main(int argc, char **argv)
 	// Checking case with no data
 	{
 		argMaker.reset();
-		char** my_argv = argMaker.makeArgV();
-		size_t my_argc = argMaker.makeArgC();
+		const auto& argcv = argMaker.makeArgCV();
+		size_t my_argc = argcv.c;
+		char** my_argv = argcv.v;
 
 		printf(std::to_string(my_argc).c_str());
 	}

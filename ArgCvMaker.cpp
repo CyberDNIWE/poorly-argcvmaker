@@ -43,10 +43,9 @@ void ArgCvMaker::add(const std::string& data)
 	++m_totalElements;
 }
 
-char** ArgCvMaker::makeArgV()
+const ArgCvMaker::ArgCV& ArgCvMaker::makeArgCV()
 {
 	m_argv.clear();
-	
 	if(m_totalElements)
 	{
 		m_argv.reserve(m_totalElements);
@@ -61,10 +60,6 @@ char** ArgCvMaker::makeArgV()
 		m_argv.emplace_back(&_null_term);
 	}
 
-	return &m_argv[0];
-}
-
-size_t ArgCvMaker::makeArgC() const noexcept
-{
-	return m_totalElements;
+	m_cv = { m_totalElements, &m_argv[0] };
+	return m_cv;
 }
