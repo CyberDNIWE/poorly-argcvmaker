@@ -26,10 +26,22 @@ void ArgCvMaker::reset() noexcept
 
 	m_data.clear();
 	m_idxs.clear();
+
+	resetArgV();	
+}
+
+void ArgCvMaker::resetArgV() noexcept
+{
+	m_argv.clear();
+	m_cv.c = 0;
+	m_cv.v = nullptr;
 }
 
 void ArgCvMaker::add(const std::string& data)
 {
+	// Adding resets possibly generated argv and cv
+	resetArgV();
+
 	m_idxs.emplace_back(m_curIdx);
 	for(const auto& character : data)
 	{
@@ -45,7 +57,7 @@ void ArgCvMaker::add(const std::string& data)
 
 const ArgCvMaker::ArgCV& ArgCvMaker::makeArgCV()
 {
-	m_argv.clear();
+	resetArgV();
 	if(m_totalElements)
 	{
 		m_argv.reserve(m_totalElements);
@@ -60,6 +72,8 @@ const ArgCvMaker::ArgCV& ArgCvMaker::makeArgCV()
 		m_argv.emplace_back(&_null_term);
 	}
 
-	m_cv = { m_totalElements, &m_argv[0] };
+	m_cv.c = m_totalElements;
+	m_cv.v = &m_argv[0];
+
 	return m_cv;
 }

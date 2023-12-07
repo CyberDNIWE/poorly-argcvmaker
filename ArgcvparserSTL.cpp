@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 		argMaker.add(d.m_data3);
 	}
 
-	//Checking case with lots of stuff
+	// Checking case with lots of stuff
 	{
 		const poorly::ArgCvMaker::ArgCV& argcv = argMaker.makeArgCV();
 		size_t my_argc = argcv.c;
@@ -58,7 +58,22 @@ int main(int argc, char **argv)
 			printf("\n");
 		}
 	}
+	
+	// Checking case with previously made argCV, adding new strings after resetArgV()
+	{
+		argMaker.resetArgV();
+		argMaker.add("Hey, hey hey, people, argV here!");
 
+		const auto& argcv = argMaker.makeArgCV();
+		size_t my_argc = argcv.c;
+		char** my_argv = argcv.v;
+		
+		for(size_t i = 0; i < my_argc; ++i) // displays "First"etc and the added one
+		{
+			printf(my_argv[i]);
+			printf("\n");
+		}
+	}
 	// Checking case with no data
 	{
 		argMaker.reset();

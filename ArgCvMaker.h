@@ -20,10 +20,12 @@ public:
 
 	void reserve(size_t newsize, size_t bookKeepSizeScaler = 4);
 	void reset() noexcept;
+	void resetArgV() noexcept;
 
+	// Any previously made ArgCVs are invalid after call
 	void add(const std::string& data);
 	
-	// Any previously made ArgVs are invalidated
+	// Any previously made ArgCVs are invalid after call
 	const ArgCV& makeArgCV();
 
 
