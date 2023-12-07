@@ -1,20 +1,71 @@
 // ArgcvparserSTL.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-#include <iostream>
+#include <string>
+#include <vector>
+#include <array>
 
-int main()
+#include "ArgCvMaker.h"
+
+struct SomeData 
 {
-    std::cout << "Hello World!\n";
+	std::string m_data1;
+	std::string m_data2;
+	std::string m_data3;
+
+	size_t size() const noexcept { return m_data1.size() + m_data2.size() + m_data3.size(); }
+};
+
+const std::array<SomeData, 2> datas = 
+{
+	SomeData{"First", "Second", "Third"},
+	SomeData{"1", "2", "3"}
+};
+
+size_t getPredictedSize()
+{
+	size_t ret = 0;
+	for(const auto& elem : datas)
+	{
+		ret += elem.size();
+	}
+
+	return ret;
 }
 
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
 
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
+int main(int argc, char **argv)
+{
+	const auto possibleSize = getPredictedSize();
+
+	poorly::ArgCvMaker argMaker = {possibleSize};
+	for(const auto& d : datas)
+	{
+		argMaker.add(d.m_data1);
+		argMaker.add(d.m_data2);
+		argMaker.add(d.m_data3);
+	}
+
+	//Checking case with lots of stuff
+	{
+		char** my_argv = argMaker.makeArgV(); // Yeeee!
+		size_t my_argc = argMaker.makeArgC();
+		
+		for(size_t i = 0; i < my_argc; ++i) // displays "First" "Second" etc
+		{
+			printf(my_argv[i]);
+			printf("\n");
+		}
+	}
+
+	// Checking case with no data
+	{
+		argMaker.reset();
+		char** my_argv = argMaker.makeArgV();
+		size_t my_argc = argMaker.makeArgC();
+
+		printf(std::to_string(my_argc).c_str());
+	}
+
+	int dbg = 2;
+}
